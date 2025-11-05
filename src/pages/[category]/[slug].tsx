@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { addReview, getReviews, getTools, Review, canEditTool } from '@/lib/storage'
+import { addReview, getReviews, getTools, Review, canEditTool, getToolPath } from '@/lib/storage'
 import { useEffect, useMemo, useState } from 'react'
 import SEO from '@/components/SEO'
 import Modal from '@/components/Modal'
@@ -8,8 +8,9 @@ import ReviewCard from '@/components/ReviewCard'
 
 export default function ToolPage() {
   const router = useRouter()
-  const slug = typeof router.query.slug === 'string' ? router.query.slug : ''
-  const tool = useMemo(()=> getTools().find(t=> t.slug===slug), [slug])
+  const { category, slug } = router.query
+  const toolSlug = typeof slug === 'string' ? slug : ''
+  const tool = useMemo(()=> getTools().find(t=> t.slug===toolSlug), [toolSlug])
   const [reviews, setReviews] = useState<Review[]>([])
   const [open, setOpen] = useState(false)
   const [userName, setUserName] = useState('')
@@ -18,32 +19,32 @@ export default function ToolPage() {
   const [pros, setPros] = useState('')
   const [cons, setCons] = useState('')
   const [rating, setRating] = useState(5)
-  const isOwner = slug && canEditTool(slug)
+  const isOwner = toolSlug && canEditTool(toolSlug)
 
   useEffect(()=>{
-    if (slug) setReviews(getReviews(slug))
-  }, [slug])
+    if (toolSlug) setReviews(getReviews(toolSlug))
+  }, [toolSlug])
 
   const submit = () => {
-    if (!slug || !userName || !experience) return
+    if (!toolSlug || !userName || !experience) return
     
     const prosArray = pros.split('\n').filter(p => p.trim())
     const consArray = cons.split('\n').filter(c => c.trim())
     
     addReview({ 
       id: String(Date.now()), 
-      toolSlug: slug, 
+      toolSlug: toolSlug, 
       author: userName,
       email: userEmail,
       rating, 
       experience,
       pros: prosArray,
       cons: consArray,
-      content: experience, // Keep for backward compatibility
+      content: experience,
       createdAt: Date.now() 
     })
     
-    setReviews(getReviews(slug))
+    setReviews(getReviews(toolSlug))
     setOpen(false)
     setExperience('')
     setPros('')
@@ -109,7 +110,7 @@ export default function ToolPage() {
             </div>
             {isOwner && (
               <Link
-                href={{ pathname: '/submit', query: { edit: tool.slug } }}
+                href={`/submit?edit=${tool.slug}`}
                 className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-lg"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -163,7 +164,7 @@ export default function ToolPage() {
             <button onClick={()=> setOpen(true)} className="rounded-lg bg-blue-600 px-4 py-2 text-white">Add Review</button>
           </div>
           <div className="mt-4 grid gap-4">
-            {reviews.map(r=> <ReviewCard key={r.id} review={r} onUpdate={() => setReviews(getReviews(slug))} />)}
+            {reviews.map(r=> <ReviewCard key={r.id} review={r} onUpdate={() => setReviews(getReviews(toolSlug))} />)}
             {!reviews.length && <div className="text-slate-600">No reviews yet.</div>}
           </div>
           <Modal open={open} onClose={()=> setOpen(false)}>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { getTools } from '@/lib/storage'
+import { getTools, getToolPath } from '@/lib/storage'
 
 const CATEGORIES = [
   { name: 'Project Management', icon: '📋', slug: 'project-management' },
@@ -175,7 +175,7 @@ export default function Nav() {
                   {searchResults.map((tool) => (
                     <Link
                       key={tool.slug}
-                      href={{ pathname: '/tool', query: { slug: tool.slug } }}
+                      href={getToolPath(tool)}
                       onClick={() => {
                         setShowResults(false)
                         setSearchQuery('')
@@ -255,7 +255,7 @@ export default function Nav() {
                   {searchResults.map((tool) => (
                     <Link
                       key={tool.slug}
-                      href={{ pathname: '/tool', query: { slug: tool.slug } }}
+                      href={getToolPath(tool)}
                       onClick={() => {
                         setShowResults(false)
                         setSearchQuery('')

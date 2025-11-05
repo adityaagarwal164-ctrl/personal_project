@@ -9,7 +9,7 @@ export type Tool = {
   cons?: string[]
   pricing: string
   category: string
-  website?: string
+  website: string // Required homepage URL
   averageRating?: number
   submittedBy?: string // Email of the user who submitted this tool
 }
@@ -43,6 +43,14 @@ export function getTools(): Tool[] {
 
 export function saveTools(list: Tool[]) {
   localStorage.setItem(KEYS.tools, JSON.stringify(list))
+}
+
+export function checkDuplicateWebsite(website: string, excludeSlug?: string): boolean {
+  const tools = getTools()
+  return tools.some(tool => 
+    tool.website.toLowerCase() === website.toLowerCase() && 
+    tool.slug !== excludeSlug
+  )
 }
 
 export function upsertTool(t: Tool) {
@@ -137,6 +145,13 @@ export function getStats() {
   }
 }
 
+export function generateCategorySlug(category: string): string {
+  return category
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
 export function generateSlug(name: string, category: string): string {
   const baseslug = name
     .toLowerCase()
@@ -144,6 +159,11 @@ export function generateSlug(name: string, category: string): string {
     .replace(/^-+|-+$/g, '')
   
   return baseslug
+}
+
+export function getToolPath(tool: Tool): string {
+  const categorySlug = generateCategorySlug(tool.category)
+  return `/${categorySlug}/${tool.slug}`
 }
 
 // ===== AUTHENTICATION & EMAIL VERIFICATION =====

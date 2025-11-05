@@ -1,10 +1,10 @@
 import { FormEvent, useState, useEffect } from 'react'
 import SEO from '@/components/SEO'
-import { Tool, upsertTool, generateSlug } from '@/lib/storage'
+import { Tool, upsertTool, generateSlug, checkDuplicateWebsite, getToolPath } from '@/lib/storage'
 import { useRouter } from 'next/router'
 
 export default function Submit() {
-  const [form, setForm] = useState<Tool>({ slug:'', name:'', overview:'', useCases:[], pros:[], cons:[], pricing:'', category:'' })
+  const [form, setForm] = useState<Tool>({ slug:'', name:'', overview:'', useCases:[], pros:[], cons:[], pricing:'', category:'', website:'' })
   const router = useRouter()
   const [isEditMode, setIsEditMode] = useState(false)
   const editSlug = typeof router.query.edit === 'string' ? router.query.edit : null
@@ -38,7 +38,17 @@ export default function Submit() {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
     
-    if (!form.name) return
+    if (!form.name || !form.website) {
+      alert('❌ Please fill in all required fields')
+      return
+    }
+
+    // Check for duplicate website URL
+    const isDuplicate = checkDuplicateWebsite(form.website, isEditMode ? form.slug : undefined)
+    if (isDuplicate) {
+      alert('❌ A tool with this website URL already exists! Please check if your tool is already listed.')
+      return
+    }
     
     // Generate slug if not already set
     const finalTool = {
@@ -48,7 +58,7 @@ export default function Submit() {
     
     upsertTool(finalTool)
     alert(isEditMode ? '✅ Tool updated successfully!' : '✅ Tool submitted successfully!')
-    router.push({ pathname:'/tool', query:{ slug: finalTool.slug } })
+    router.push(getToolPath(finalTool))
   }
   
   return (
@@ -119,6 +129,18 @@ export default function Submit() {
                   <option value="HR">👥 HR</option>
                   <option value="Finance">💳 Finance</option>
                 </select>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Website URL *</label>
+                <input 
+                  type="url"
+                  placeholder="https://yourtool.com" 
+                  className="w-full rounded-xl border-2 border-slate-200 px-4 py-3 focus:border-blue-500 focus:outline-none transition-colors" 
+                  value={form.website} 
+                  onChange={e=>setForm({...form, website:e.target.value})} 
+                  required
+                />
+                <p className="mt-2 text-xs text-slate-600">🔗 Your tool's homepage URL (used to prevent duplicates)</p>
               </div>
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">Tool Overview *</label>

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { Tool } from '@/lib/storage'
+import { Tool, getToolPath } from '@/lib/storage'
 
 interface ToolCarouselProps {
   tools: Tool[]
@@ -150,7 +150,7 @@ export default function ToolCarousel({ tools, category, direction = 'right' }: T
             className="flex-shrink-0 w-72 sm:w-80"
           >
             <Link
-              href={{ pathname: '/tool', query: { slug: tool.slug } }}
+              href={getToolPath(tool)}
               className="group block p-4 sm:p-6 rounded-2xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300"
             >
               <div className="flex items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
@@ -175,14 +175,27 @@ export default function ToolCarousel({ tools, category, direction = 'right' }: T
                   </div>
                 </div>
               </div>
-              <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 mb-2 sm:mb-3">
+              <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 mb-3 sm:mb-4">
                 {tool.overview}
               </p>
-              <div className="inline-flex items-center text-xs sm:text-sm font-medium text-blue-600 group-hover:gap-2 transition-all">
-                View Details
-                <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+              <div className="flex items-center gap-2">
+                {tool.website && (
+                  <a
+                    href={tool.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex-1 px-3 py-2 rounded-lg bg-blue-600 text-white text-xs sm:text-sm font-semibold hover:bg-blue-700 transition-colors text-center"
+                  >
+                    Visit Site
+                  </a>
+                )}
+                <div className="flex-1 inline-flex items-center justify-center text-xs sm:text-sm font-medium text-blue-600">
+                  Details
+                  <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
               </div>
             </Link>
           </div>

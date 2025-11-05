@@ -41,7 +41,7 @@ export default function Footer() {
         </div>
         <div className="mt-12 pt-8 border-t border-slate-200 text-center">
           <p className="text-sm text-slate-600">© {new Date().getFullYear()} SaaSPilot. All rights reserved.</p>
-          <p className="mt-2 text-sm font-medium text-slate-700">Made By Aditya Agrawal</p>
+          <p className="mt-2 text-sm font-medium text-slate-700">Made by Aditya Agrawal</p>
         </div>
       </div>
     </footer>
