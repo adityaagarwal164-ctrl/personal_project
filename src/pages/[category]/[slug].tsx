@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { addReview, getReviews, getTools, Review, canEditTool, getToolPath } from '@/lib/storage'
-import { useEffect, useMemo, useState } from 'react'
+import { addReview, getReviews, getTools, Review, canEditTool, getToolPath, ensureSeed } from '@/lib/storage'
+import { useEffect, useState } from 'react'
 import SEO from '@/components/SEO'
 import Modal from '@/components/Modal'
 import ReviewCard from '@/components/ReviewCard'
@@ -10,7 +10,8 @@ export default function ToolPage() {
   const router = useRouter()
   const { category, slug } = router.query
   const toolSlug = typeof slug === 'string' ? slug : ''
-  const tool = useMemo(()=> getTools().find(t=> t.slug===toolSlug), [toolSlug])
+  
+  const [tool, setTool] = useState<any>(null)
   const [reviews, setReviews] = useState<Review[]>([])
   const [open, setOpen] = useState(false)
   const [userName, setUserName] = useState('')
@@ -22,7 +23,17 @@ export default function ToolPage() {
   const isOwner = toolSlug && canEditTool(toolSlug)
 
   useEffect(()=>{
-    if (toolSlug) setReviews(getReviews(toolSlug))
+    // Ensure seed data is loaded
+    ensureSeed()
+    
+    if (toolSlug) {
+      const allTools = getTools()
+      const foundTool = allTools.find(t=> t.slug === toolSlug)
+      setTool(foundTool || null)
+      if (foundTool) {
+        setReviews(getReviews(toolSlug))
+      }
+    }
   }, [toolSlug])
 
   const submit = () => {
@@ -67,15 +78,12 @@ export default function ToolPage() {
     } : undefined
   } : undefined
 
-  const baseUrl = typeof window !== 'undefined' 
-    ? window.location.origin 
-    : process.env.NEXT_PUBLIC_SITE_URL || 'https://saaspilot.com'
-  const ogImageUrl = tool ? `${baseUrl}/api/og-image?slug=${tool.slug}` : undefined
+  const ogImageUrl = tool ? `/api/og-image?slug=${tool.slug}` : undefined
   
   return (
     <div className="mx-auto max-w-5xl px-6 py-12">
       <SEO 
-        title={tool? `${tool.name} reviews and pricing` : 'Tool'} 
+        title={tool? `${tool.name} - Reviews, Pricing & Features` : 'Tool'} 
         description={tool?.overview} 
         image={ogImageUrl}
         schema={schema} 
@@ -127,7 +135,7 @@ export default function ToolPage() {
             <div className="rounded-xl bg-white p-4 shadow">
               <div className="font-semibold mb-3">Use cases</div>
               <ul className="space-y-2">
-                {tool.useCases?.map(u=> (
+                {tool.useCases?.map((u: string)=> (
                   <li key={u} className="flex items-start gap-2">
                     <span className="text-blue-500 text-lg">•</span>
                     <span className="text-slate-700">{u}</span>
@@ -138,7 +146,7 @@ export default function ToolPage() {
             <div className="rounded-xl bg-white p-4 shadow">
               <div className="font-semibold mb-3 text-green-700">✓ Pros</div>
               <ul className="space-y-2">
-                {tool.pros?.map(u=> (
+                {tool.pros?.map((u: string)=> (
                   <li key={u} className="flex items-start gap-2">
                     <span className="text-green-500 font-bold text-xl flex-shrink-0">✓</span>
                     <span className="text-slate-700">{u}</span>
@@ -149,7 +157,7 @@ export default function ToolPage() {
             <div className="rounded-xl bg-white p-4 shadow">
               <div className="font-semibold mb-3 text-red-700">✗ Cons</div>
               <ul className="space-y-2">
-                {tool.cons?.map(u=> (
+                {tool.cons?.map((u: string)=> (
                   <li key={u} className="flex items-start gap-2">
                     <span className="text-red-500 font-bold text-xl flex-shrink-0">✗</span>
                     <span className="text-slate-700">{u}</span>

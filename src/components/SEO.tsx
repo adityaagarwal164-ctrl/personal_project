@@ -11,13 +11,26 @@ type Props = {
 
 export default function SEO({ title, description, urlPath, image, schema }: Props) {
   const router = useRouter()
-  const envBase = process.env.NEXT_PUBLIC_SITE_URL || ''
-  const baseUrl = envBase.endsWith('/') ? envBase.slice(0, -1) : envBase
+  
+  // Get base URL - use window location in browser, fallback to env or default
+  const getBaseUrl = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin
+    }
+    const envBase = process.env.NEXT_PUBLIC_SITE_URL || ''
+    return envBase.endsWith('/') ? envBase.slice(0, -1) : envBase
+  }
+  
+  const baseUrl = getBaseUrl()
   const path = urlPath || router.asPath || '/'
   const url = baseUrl ? `${baseUrl}${path}` : path
-  const metaTitle = title || 'SaaS Reviews and Discovery'
-  const metaDesc = description || 'Find, compare, and review software tools.'
-  const ogImage = image || '/next.svg'
+  const metaTitle = title || 'SaaSPilot - Discover Top SaaS Tools & Reviews'
+  const metaDesc = description || 'Find, compare, and review the best software tools for your business. Honest reviews and ratings from real users.'
+  
+  // Make sure OG image is absolute URL
+  const ogImage = image 
+    ? (image.startsWith('http') ? image : `${baseUrl}${image}`)
+    : `${baseUrl}/next.svg`
   return (
     <Head>
       <title>{metaTitle}</title>
