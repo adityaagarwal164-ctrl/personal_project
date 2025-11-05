@@ -9,7 +9,7 @@ export default function Home() {
   
   return (
     <>
-      <SEO title="Discover Top SaaS Tools & Reviews" description="Find the perfect software for your business. Read honest reviews, compare features, and make better decisions with SaaS Scout." />
+      <SEO title="Discover Top SaaS Tools & Reviews" description="Find the perfect software for your business. Read honest reviews, compare features, and make better decisions with SaaSPilot." />
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 via-indigo-600 to-blue-800 animate-gradient">
@@ -81,7 +81,7 @@ export default function Home() {
         <section className="py-12 sm:py-24 bg-white">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div className="text-center mb-8 sm:mb-16">
-              <h2 className="text-2xl sm:text-4xl font-bold text-slate-900">Why Teams Trust SaaS Scout</h2>
+              <h2 className="text-2xl sm:text-4xl font-bold text-slate-900">Why Teams Trust SaaSPilot</h2>
               <p className="mt-3 sm:mt-4 text-base sm:text-xl text-slate-600">Real reviews. Real results. Zero BS.</p>
             </div>
             <div className="grid gap-6 sm:gap-8 md:grid-cols-3">

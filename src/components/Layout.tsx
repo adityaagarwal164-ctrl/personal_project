@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'SaaS Scout',
+    name: 'SaaSPilot',
     url: process.env.NEXT_PUBLIC_SITE_URL || '',
     potentialAction: {
       '@type': 'SearchAction',

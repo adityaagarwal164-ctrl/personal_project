@@ -53,7 +53,7 @@ export default function Submit() {
   
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <SEO title="Submit Your SaaS Tool" description="List your software on SaaS Scout and get discovered by thousands of potential customers." />
+      <SEO title="Submit Your SaaS Tool" description="List your software on SaaSPilot and get discovered by thousands of potential customers." />
       
       {/* Header */}
       <div className="bg-gradient-to-br from-blue-500 via-blue-600 via-indigo-600 to-blue-800 animate-gradient py-20">
