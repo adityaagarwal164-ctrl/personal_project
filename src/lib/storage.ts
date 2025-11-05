@@ -45,10 +45,26 @@ export function saveTools(list: Tool[]) {
   localStorage.setItem(KEYS.tools, JSON.stringify(list))
 }
 
+// Normalize URL to catch variations (www, trailing slash, protocol)
+function normalizeUrl(url: string): string {
+  try {
+    const urlObj = new URL(url)
+    // Remove www, convert to lowercase, remove trailing slash, ignore protocol
+    const hostname = urlObj.hostname.toLowerCase().replace(/^www\./, '')
+    const pathname = urlObj.pathname.replace(/\/$/, '') || '/'
+    return `${hostname}${pathname}`
+  } catch {
+    // If URL is invalid, return as-is lowercased
+    return url.toLowerCase().replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '')
+  }
+}
+
 export function checkDuplicateWebsite(website: string, excludeSlug?: string): boolean {
   const tools = getTools()
+  const normalizedInput = normalizeUrl(website)
+  
   return tools.some(tool => 
-    tool.website.toLowerCase() === website.toLowerCase() && 
+    normalizeUrl(tool.website) === normalizedInput && 
     tool.slug !== excludeSlug
   )
 }
