@@ -3,8 +3,8 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <footer className="bg-gradient-to-b from-slate-50 to-slate-100 border-t border-slate-200">
-      <div className="mx-auto max-w-7xl px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 sm:gap-12">
           <div className="col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-sky-500 via-blue-600 to-blue-700 animate-gradient-fast shadow-lg flex items-center justify-center">

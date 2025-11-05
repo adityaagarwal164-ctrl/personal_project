@@ -25,7 +25,7 @@ export default function Home() {
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-radial from-blue-400/20 to-transparent rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-radial from-indigo-400/20 to-transparent rounded-full blur-3xl"></div>
           
-          <div className="relative mx-auto max-w-7xl px-6 py-32 sm:py-40">
+          <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20 sm:py-32">
             <div className="text-center">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-blue-500/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm border border-white/20">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -33,17 +33,17 @@ export default function Home() {
                 </svg>
                 Trusted by Top SaaS Buyers
               </div>
-              <h1 className="text-5xl sm:text-7xl font-bold text-white leading-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight">
                 Find the Perfect SaaS<br />
                 <span className="bg-gradient-to-r from-blue-200 to-cyan-200 bg-clip-text text-transparent">for Your Business</span>
               </h1>
-              <p className="mt-6 text-xl text-blue-100 max-w-3xl mx-auto">
+              <p className="mt-4 sm:mt-6 text-base sm:text-xl text-blue-100 max-w-3xl mx-auto">
                 Stop wasting time on endless research. Get honest reviews, compare features side-by-side, and discover tools that actually solve your problems.
               </p>
-              <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
                 <Link 
                   href="/write-review" 
-                  className="group px-8 py-4 rounded-xl bg-white text-blue-700 font-bold text-lg shadow-2xl shadow-blue-900/50 hover:shadow-blue-900/70 hover:scale-105 transition-all duration-300 inline-flex items-center gap-2"
+                  className="group px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-white text-blue-700 font-bold text-base sm:text-lg shadow-2xl shadow-blue-900/50 hover:shadow-blue-900/70 hover:scale-105 transition-all duration-300 inline-flex items-center gap-2 w-full sm:w-auto justify-center"
                 >
                   Explore Reviews
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -52,25 +52,25 @@ export default function Home() {
                 </Link>
                 <Link 
                   href="/categories" 
-                  className="px-8 py-4 rounded-xl bg-blue-500/20 backdrop-blur-sm text-white font-semibold text-lg border-2 border-white/30 hover:bg-blue-500/30 hover:border-white/50 transition-all duration-300"
+                  className="px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-blue-500/20 backdrop-blur-sm text-white font-semibold text-base sm:text-lg border-2 border-white/30 hover:bg-blue-500/30 hover:border-white/50 transition-all duration-300 w-full sm:w-auto text-center"
                 >
                   Browse Categories
                 </Link>
               </div>
-              <div className="mt-12 flex items-center justify-center gap-8 text-blue-100">
+              <div className="mt-8 sm:mt-12 flex items-center justify-center gap-4 sm:gap-8 text-blue-100 flex-wrap">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white">{stats.toolsCount}+</div>
-                  <div className="text-sm">Tools Listed</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-white">{stats.toolsCount}+</div>
+                  <div className="text-xs sm:text-sm">Tools Listed</div>
                 </div>
-                <div className="h-12 w-px bg-blue-400/30"></div>
+                <div className="h-8 sm:h-12 w-px bg-blue-400/30"></div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white">{stats.reviewsCount}+</div>
-                  <div className="text-sm">Reviews</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-white">{stats.reviewsCount}+</div>
+                  <div className="text-xs sm:text-sm">Reviews</div>
                 </div>
-                <div className="h-12 w-px bg-blue-400/30"></div>
+                <div className="h-8 sm:h-12 w-px bg-blue-400/30"></div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white">{stats.categoriesCount}</div>
-                  <div className="text-sm">Categories</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-white">{stats.categoriesCount}</div>
+                  <div className="text-xs sm:text-sm">Categories</div>
                 </div>
               </div>
             </div>
@@ -78,13 +78,13 @@ export default function Home() {
         </section>
 
         {/* Why Choose Us */}
-        <section className="py-24 bg-white">
-          <div className="mx-auto max-w-7xl px-6">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-slate-900">Why Teams Trust SaaS Scout</h2>
-              <p className="mt-4 text-xl text-slate-600">Real reviews. Real results. Zero BS.</p>
+        <section className="py-12 sm:py-24 bg-white">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="text-center mb-8 sm:mb-16">
+              <h2 className="text-2xl sm:text-4xl font-bold text-slate-900">Why Teams Trust SaaS Scout</h2>
+              <p className="mt-3 sm:mt-4 text-base sm:text-xl text-slate-600">Real reviews. Real results. Zero BS.</p>
             </div>
-            <div className="grid gap-8 md:grid-cols-3">
+            <div className="grid gap-6 sm:gap-8 md:grid-cols-3">
               <div className="group p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-cyan-50 border border-blue-100 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-2 transition-all duration-300">
                 <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 animate-gradient-fast flex items-center justify-center shadow-lg shadow-blue-500/30 mb-6 group-hover:scale-110 transition-transform">
                   <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -119,12 +119,12 @@ export default function Home() {
         </section>
 
         {/* Category Carousels */}
-        {Array.from(toolsByCategory.entries()).map(([category, categoryTools]) => (
-          <section key={category} className="py-16 bg-gradient-to-b from-slate-50 to-white">
-            <div className="mx-auto max-w-7xl px-6">
-              <div className="flex items-center justify-between mb-8">
+        {Array.from(toolsByCategory.entries()).map(([category, categoryTools], index) => (
+          <section key={category} className="py-8 sm:py-16 bg-gradient-to-b from-slate-50 to-white">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-8">
                 <div>
-                  <h2 className="text-3xl font-bold text-slate-900">
+                  <h2 className="text-xl sm:text-3xl font-bold text-slate-900">
                     {category === 'Project Management' && '📋'} 
                     {category === 'Communication' && '💬'}
                     {category === 'HR' && '👥'}
@@ -134,41 +134,42 @@ export default function Home() {
                     {category === 'Development' && '💻'}
                     {' '}{category}
                   </h2>
-                  <p className="mt-2 text-lg text-slate-600">
+                  <p className="mt-1 sm:mt-2 text-sm sm:text-lg text-slate-600">
                     {categoryTools.length} tools to streamline your workflow
                   </p>
                 </div>
                 <Link 
                   href={`/categories?category=${encodeURIComponent(category)}`}
-                  className="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center gap-2 hover:gap-3 transition-all"
+                  className="text-blue-600 text-sm sm:text-base font-semibold hover:text-blue-700 inline-flex items-center gap-1 sm:gap-2 hover:gap-3 transition-all"
                 >
-                  View All
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <span className="hidden sm:inline">View All</span>
+                  <span className="sm:hidden">All</span>
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </Link>
               </div>
-              <ToolCarousel tools={categoryTools} category={category} />
+              <ToolCarousel tools={categoryTools} category={category} direction={index % 2 === 0 ? 'right' : 'left'} />
             </div>
           </section>
         ))}
 
         {/* CTA Section */}
-        <section className="py-24 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 animate-gradient relative overflow-hidden">
+        <section className="py-12 sm:py-24 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 animate-gradient relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAxOGMzLjMxNCAwIDYgMi42ODYgNiA2cy0yLjY4NiA2LTYgNi02LTIuNjg2LTYtNiAyLjY4Ni02IDYtNnoiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii4xIi8+PC9nPjwvc3ZnPg==')] opacity-10"></div>
-          <div className="relative mx-auto max-w-4xl px-6 text-center">
-            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">Got a SaaS Product?</h2>
-            <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">Join 500+ companies already listed. Get discovered by thousands of potential customers actively looking for solutions like yours.</p>
+          <div className="relative mx-auto max-w-4xl px-4 sm:px-6 text-center">
+            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">Got a SaaS Product?</h2>
+            <p className="text-base sm:text-xl text-blue-100 mb-6 sm:mb-10 max-w-2xl mx-auto">Join 500+ companies already listed. Get discovered by thousands of potential customers actively looking for solutions like yours.</p>
             <Link 
               href="/submit" 
-              className="inline-flex items-center gap-3 px-10 py-5 rounded-xl bg-white text-blue-700 font-bold text-lg shadow-2xl shadow-blue-900/50 hover:shadow-blue-900/70 hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-10 py-3 sm:py-5 rounded-xl bg-white text-blue-700 font-bold text-base sm:text-lg shadow-2xl shadow-blue-900/50 hover:shadow-blue-900/70 hover:scale-105 transition-all duration-300"
             >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
               Submit Your Tool for Free
             </Link>
-            <p className="mt-4 text-sm text-blue-200">No credit card required • Get listed in 5 minutes</p>
+            <p className="mt-3 sm:mt-4 text-xs sm:text-sm text-blue-200">No credit card required • Get listed in 5 minutes</p>
           </div>
         </section>
       </main>
