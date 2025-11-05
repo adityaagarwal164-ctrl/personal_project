@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { SEED_TOOLS } from '@/lib/seedData'
+import { createCanvas, registerFont } from 'canvas'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -18,65 +19,92 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const rating = tool?.averageRating || 0
     const overview = tool?.overview || 'Discover and review SaaS tools'
     
-    // Generate star rating display
+    // Create canvas
+    const canvas = createCanvas(width, height)
+    const ctx = canvas.getContext('2d')
+    
+    // Gradient background
+    const gradient = ctx.createLinearGradient(0, 0, width, height)
+    gradient.addColorStop(0, '#3b82f6')
+    gradient.addColorStop(0.5, '#4f46e5')
+    gradient.addColorStop(1, '#1e40af')
+    ctx.fillStyle = gradient
+    ctx.fillRect(0, 0, width, height)
+    
+    // White content box with shadow
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)'
+    ctx.shadowBlur = 20
+    ctx.shadowOffsetY = 10
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.97)'
+    ctx.beginPath()
+    ctx.roundRect(60, 60, 1080, 510, 20)
+    ctx.fill()
+    ctx.shadowColor = 'transparent'
+    
+    // Tool name
+    ctx.fillStyle = '#1e293b'
+    ctx.font = 'bold 72px Arial, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText(toolName, width / 2, 160)
+    
+    // Overview (wrap text)
+    ctx.fillStyle = '#475569'
+    ctx.font = '28px Arial, sans-serif'
+    const maxWidth = 1000
+    const words = overview.split(' ')
+    let line = ''
+    let y = 240
+    const lineHeight = 40
+    let lineCount = 0
+    const maxLines = 3
+    
+    for (let i = 0; i < words.length; i++) {
+      const testLine = line + words[i] + ' '
+      const metrics = ctx.measureText(testLine)
+      
+      if (metrics.width > maxWidth && i > 0) {
+        if (lineCount < maxLines - 1) {
+          ctx.fillText(line, width / 2, y)
+          line = words[i] + ' '
+          y += lineHeight
+          lineCount++
+        } else {
+          ctx.fillText(line.trim() + '...', width / 2, y)
+          break
+        }
+      } else {
+        line = testLine
+      }
+    }
+    if (lineCount < maxLines) {
+      ctx.fillText(line, width / 2, y)
+    }
+    
+    // Star rating
+    ctx.fillStyle = '#fbbf24'
+    ctx.font = '56px Arial, sans-serif'
     const fullStars = Math.floor(rating)
     const hasHalfStar = rating % 1 >= 0.5
-    const stars = '★'.repeat(fullStars) + (hasHalfStar ? '½' : '') + '☆'.repeat(5 - Math.ceil(rating))
+    const stars = '★'.repeat(fullStars) + (hasHalfStar ? '⯨' : '') + '☆'.repeat(5 - Math.ceil(rating))
+    ctx.fillText(stars, width / 2, 400)
     
-    // Truncate overview to fit
-    const truncatedOverview = overview.length > 120 ? overview.substring(0, 120) + '...' : overview
+    // Rating number
+    ctx.fillStyle = '#64748b'
+    ctx.font = '32px Arial, sans-serif'
+    ctx.fillText(`${rating.toFixed(1)} / 5.0`, width / 2, 450)
     
-    const svg = `
-      <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-            <stop offset="50%" style="stop-color:#4f46e5;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
-          </linearGradient>
-          <filter id="shadow">
-            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.3"/>
-          </filter>
-        </defs>
-        
-        <!-- Background -->
-        <rect width="100%" height="100%" fill="url(#grad)"/>
-        
-        <!-- Pattern overlay -->
-        <rect width="100%" height="100%" fill="url(#pattern)" opacity="0.1"/>
-        
-        <!-- Content container -->
-        <rect x="60" y="60" width="1080" height="510" rx="20" fill="white" opacity="0.95" filter="url(#shadow)"/>
-        
-        <!-- Tool name -->
-        <text x="600" y="180" text-anchor="middle" fill="#1e293b" font-size="72" font-weight="bold" font-family="system-ui, -apple-system, sans-serif">
-          ${toolName}
-        </text>
-        
-        <!-- Overview -->
-        <text x="600" y="260" text-anchor="middle" fill="#475569" font-size="28" font-family="system-ui, sans-serif">
-          <tspan x="600" dy="0">${truncatedOverview.substring(0, 60)}</tspan>
-          ${truncatedOverview.length > 60 ? `<tspan x="600" dy="35">${truncatedOverview.substring(60)}</tspan>` : ''}
-        </text>
-        
-        <!-- Rating -->
-        <text x="600" y="380" text-anchor="middle" fill="#fbbf24" font-size="56" font-family="system-ui, sans-serif">
-          ${stars}
-        </text>
-        <text x="600" y="420" text-anchor="middle" fill="#64748b" font-size="32" font-family="system-ui, sans-serif">
-          ${rating.toFixed(1)} / 5.0
-        </text>
-        
-        <!-- Site name -->
-        <text x="600" y="510" text-anchor="middle" fill="#3b82f6" font-size="36" font-weight="600" font-family="system-ui, sans-serif">
-          SaaSPilot.com
-        </text>
-      </svg>
-    `
-
-    res.setHeader('Content-Type', 'image/svg+xml')
-    res.setHeader('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400')
-    return res.status(200).send(svg)
+    // Site name
+    ctx.fillStyle = '#3b82f6'
+    ctx.font = 'bold 36px Arial, sans-serif'
+    ctx.fillText('SaaSPilot.com', width / 2, 530)
+    
+    // Convert to PNG buffer
+    const buffer = canvas.toBuffer('image/png')
+    
+    res.setHeader('Content-Type', 'image/png')
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+    return res.status(200).send(buffer)
   } catch (error) {
     console.error('OG Image generation error:', error)
     return res.status(500).json({ error: 'Failed to generate image' })

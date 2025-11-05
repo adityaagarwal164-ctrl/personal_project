@@ -67,7 +67,10 @@ export default function ToolPage() {
     } : undefined
   } : undefined
 
-  const ogImageUrl = tool ? `/api/og-image?slug=${tool.slug}` : undefined
+  const baseUrl = typeof window !== 'undefined' 
+    ? window.location.origin 
+    : process.env.NEXT_PUBLIC_SITE_URL || 'https://saaspilot.com'
+  const ogImageUrl = tool ? `${baseUrl}/api/og-image?slug=${tool.slug}` : undefined
   
   return (
     <div className="mx-auto max-w-5xl px-6 py-12">
