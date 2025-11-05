@@ -1,10 +1,9 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { addReview, getReviews, getTools, getUser, Review, setUser, canEditTool, isEmailVerified } from '@/lib/storage'
+import { addReview, getReviews, getTools, Review, canEditTool } from '@/lib/storage'
 import { useEffect, useMemo, useState } from 'react'
 import SEO from '@/components/SEO'
 import Modal from '@/components/Modal'
-import EmailVerification from '@/components/EmailVerification'
 import ReviewCard from '@/components/ReviewCard'
 
 export default function ToolPage() {
@@ -12,26 +11,14 @@ export default function ToolPage() {
   const slug = typeof router.query.slug === 'string' ? router.query.slug : ''
   const tool = useMemo(()=> getTools().find(t=> t.slug===slug), [slug])
   const [reviews, setReviews] = useState<Review[]>([])
-  const [user, setUserState] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
-  const [showVerification, setShowVerification] = useState(false)
   const [userName, setUserName] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [experience, setExperience] = useState('')
   const [pros, setPros] = useState('')
   const [cons, setCons] = useState('')
   const [rating, setRating] = useState(5)
-  const [isVerified, setIsVerified] = useState(false)
   const isOwner = slug && canEditTool(slug)
-
-  useEffect(()=>{
-    const savedUser = getUser()
-    setUserState(savedUser)
-    if (savedUser) {
-      setUserEmail(savedUser)
-      setIsVerified(isEmailVerified(savedUser))
-    }
-  }, [])
 
   useEffect(()=>{
     if (slug) setReviews(getReviews(slug))
@@ -160,21 +147,7 @@ export default function ToolPage() {
             {!reviews.length && <div className="text-slate-600">No reviews yet.</div>}
           </div>
           <Modal open={open} onClose={()=> setOpen(false)}>
-            {!isVerified ? (
-              <EmailVerification 
-                onVerified={(email: string) => { 
-                  setUserEmail(email); 
-                  setUser(email); 
-                  setUserState(email); 
-                  setIsVerified(true);
-                  setOpen(false);
-                  alert('✅ Email verified! You can now write reviews.');
-                }} 
-                title="Verify Email to Review"
-                description="To prevent spam, please verify your email before writing a review."
-              />
-            ) : (
-              <div className="space-y-5">
+            <div className="space-y-5">
                 <div className="text-2xl font-bold text-slate-900">Write Your Review</div>
                 
                 <div>
@@ -246,7 +219,6 @@ export default function ToolPage() {
                   Submit Review
                 </button>
               </div>
-            )}
           </Modal>
         </>
       )}

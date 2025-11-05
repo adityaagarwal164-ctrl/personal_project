@@ -1,37 +1,26 @@
 import { FormEvent, useState, useEffect } from 'react'
 import SEO from '@/components/SEO'
-import Modal from '@/components/Modal'
-import EmailVerification from '@/components/EmailVerification'
-import { Tool, upsertTool, generateSlug, getUser, isEmailVerified } from '@/lib/storage'
+import { Tool, upsertTool, generateSlug } from '@/lib/storage'
 import { useRouter } from 'next/router'
 
 export default function Submit() {
   const [form, setForm] = useState<Tool>({ slug:'', name:'', overview:'', useCases:[], pros:[], cons:[], pricing:'', category:'' })
   const router = useRouter()
-  const [verifiedEmail, setVerifiedEmail] = useState<string | null>(null)
-  const [showVerification, setShowVerification] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
   const editSlug = typeof router.query.edit === 'string' ? router.query.edit : null
-
-  useEffect(() => {
-    const currentUser = getUser()
-    if (currentUser && isEmailVerified(currentUser)) {
-      setVerifiedEmail(currentUser)
-    }
-  }, [])
 
   // Load tool data if in edit mode
   useEffect(() => {
     if (editSlug) {
-      import('@/lib/storage').then(({ getTools, canEditTool }) => {
+      import('@/lib/storage').then(({ getTools }) => {
         const tools = getTools()
         const tool = tools.find(t => t.slug === editSlug)
         
-        if (tool && canEditTool(editSlug)) {
+        if (tool) {
           setForm(tool)
           setIsEditMode(true)
         } else {
-          alert('❌ You do not have permission to edit this tool')
+          alert('❌ Tool not found')
           router.push('/')
         }
       })
@@ -49,30 +38,17 @@ export default function Submit() {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
     
-    // Check if email is verified
-    if (!verifiedEmail || !isEmailVerified(verifiedEmail)) {
-      setShowVerification(true)
-      return
-    }
-    
     if (!form.name) return
     
-    // Generate slug if not already set and add submittedBy
+    // Generate slug if not already set
     const finalTool = {
       ...form,
-      slug: form.slug || generateSlug(form.name, form.category),
-      submittedBy: verifiedEmail
+      slug: form.slug || generateSlug(form.name, form.category)
     }
     
     upsertTool(finalTool)
     alert(isEditMode ? '✅ Tool updated successfully!' : '✅ Tool submitted successfully!')
     router.push({ pathname:'/tool', query:{ slug: finalTool.slug } })
-  }
-
-  const handleVerified = (email: string) => {
-    setVerifiedEmail(email)
-    setShowVerification(false)
-    alert('✅ Email verified! You can now submit your tool.')
   }
   
   return (
@@ -95,44 +71,6 @@ export default function Submit() {
 
       {/* Form */}
       <div className="mx-auto max-w-3xl px-6 py-16">
-        {/* Verification Status Banner */}
-        {verifiedEmail ? (
-          <div className="mb-8 p-4 bg-green-50 border-2 border-green-200 rounded-2xl flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div>
-                <div className="font-bold text-green-900">Email Verified ✓</div>
-                <div className="text-sm text-green-700">{verifiedEmail}</div>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div className="mb-8 p-4 bg-amber-50 border-2 border-amber-200 rounded-2xl flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-amber-500 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <div className="font-bold text-amber-900">Email Verification Required</div>
-                <div className="text-sm text-amber-700">You must verify your email before submitting</div>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={() => setShowVerification(true)}
-              className="px-4 py-2 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-700 transition-colors"
-            >
-              Verify Now
-            </button>
-          </div>
-        )}
-
         <form onSubmit={onSubmit} className="space-y-8">
           <div className="p-8 rounded-2xl bg-white shadow-xl border border-slate-200">
             <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
@@ -280,15 +218,6 @@ export default function Submit() {
           </button>
         </form>
       </div>
-
-      {/* Email Verification Modal */}
-      <Modal open={showVerification} onClose={() => setShowVerification(false)}>
-        <EmailVerification 
-          onVerified={handleVerified}
-          title="Verify Email to Submit"
-          description="To prevent spam and maintain quality, we require email verification before submitting tools."
-        />
-      </Modal>
     </div>
   )
 }
