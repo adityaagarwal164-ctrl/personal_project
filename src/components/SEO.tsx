@@ -7,9 +7,22 @@ type Props = {
   urlPath?: string
   image?: string
   schema?: object
+  // New OG image generation props
+  ogImageId?: string
+  ogImageAuthor?: string
+  ogImageCategory?: string
 }
 
-export default function SEO({ title, description, urlPath, image, schema }: Props) {
+export default function SEO({ 
+  title, 
+  description, 
+  urlPath, 
+  image, 
+  schema,
+  ogImageId,
+  ogImageAuthor,
+  ogImageCategory
+}: Props) {
   const router = useRouter()
   
   // Get base URL - use window location in browser, fallback to env or default
@@ -27,10 +40,42 @@ export default function SEO({ title, description, urlPath, image, schema }: Prop
   const metaTitle = title || 'SaaSPilot - Discover Top SaaS Tools & Reviews'
   const metaDesc = description || 'Find, compare, and review the best software tools for your business. Honest reviews and ratings from real users.'
   
-  // Make sure OG image is absolute URL
-  const ogImage = image 
-    ? (image.startsWith('http') ? image : `${baseUrl}${image}`)
-    : `${baseUrl}/next.svg`
+  // Generate OG image URL
+  const getOGImageUrl = (): string => {
+    // If manual image is provided, use it
+    if (image) {
+      return image.startsWith('http') ? image : `${baseUrl}${image}`
+    }
+    
+    // If ogImageId is provided, generate dynamic OG image
+    if (ogImageId && metaTitle) {
+      const params = new URLSearchParams({
+        id: ogImageId,
+        title: metaTitle,
+      })
+      
+      if (metaDesc) {
+        params.set('desc', metaDesc)
+      }
+      
+      if (ogImageAuthor) {
+        params.set('author', ogImageAuthor)
+      }
+      
+      if (ogImageCategory) {
+        params.set('category', ogImageCategory)
+      }
+      
+      // For cached images, try to use the direct path first
+      // The API will generate it on first request
+      return `${baseUrl}/previews/${ogImageId}.png`
+    }
+    
+    // Fallback to default
+    return `${baseUrl}/next.svg`
+  }
+  
+  const ogImage = getOGImageUrl()
   return (
     <Head>
       <title>{metaTitle}</title>

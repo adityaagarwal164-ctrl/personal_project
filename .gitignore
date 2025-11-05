@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Open Graph generated images (keep directory structure)
+/public/previews/*.png
+!/public/previews/.gitkeep
+!/public/previews/README.md

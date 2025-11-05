@@ -7,7 +7,10 @@
     "build": "next build --webpack",
     "export": "next build --webpack && next export",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate-og": "node scripts/generate-homepage-og.js",
+    "clear-og-cache": "node scripts/clear-og-cache.js",
+    "test-og": "node scripts/test-og-generation.js"
   },
   "dependencies": {
     "canvas": "^3.2.0",

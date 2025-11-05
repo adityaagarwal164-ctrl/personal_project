@@ -9,7 +9,11 @@ export default function Home() {
   
   return (
     <>
-      <SEO title="Discover Top SaaS Tools & Reviews" description="Find the perfect software for your business. Read honest reviews, compare features, and make better decisions with SaaSPilot." />
+      <SEO 
+        title="Discover Top SaaS Tools & Reviews" 
+        description="Find the perfect software for your business. Read honest reviews, compare features, and make better decisions with SaaSPilot." 
+        image="/og-image.png"
+      />
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 via-indigo-600 to-blue-800 animate-gradient">

@@ -73,6 +73,7 @@ const blogPosts = [
       </ul>
       
       <h2>Key Features to Look For</h2>
+      
       <p><strong>1. Contact Management:</strong> Easy way to store and organize customer information</p>
       <p><strong>2. Pipeline Visualization:</strong> See where each deal stands at a glance</p>
       <p><strong>3. Email Integration:</strong> Track all communications in one place</p>
@@ -210,7 +211,9 @@ export default function BlogPost() {
       <SEO 
         title={`${post.title} - SaaSPilot Blog`}
         description={post.excerpt}
-        image={post.image}
+        ogImageId={`blog-${post.id}`}
+        ogImageAuthor={post.author}
+        ogImageCategory={post.category}
       />
       
       {/* Header Image */}
